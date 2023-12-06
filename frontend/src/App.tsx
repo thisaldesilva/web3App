@@ -5,6 +5,8 @@ import ProtectedRoute from './components/Routes/ProtectedRoutes';
 import LoginPage from './components/login';
 import BakerPage from './components/baker';
 import FarmerPage from './components/Farmer';
+import RegisterPage from './components/register';
+
 function App() {
   return (
     <AuthProvider>
@@ -21,6 +23,7 @@ function App() {
               <FarmerPage />
             </ProtectedRoute>
           } />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
