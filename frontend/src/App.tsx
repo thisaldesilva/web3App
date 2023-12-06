@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { AuthProvider } from './components/Auth/AuthenticationContext';
 import ProtectedRoute from './components/Routes/ProtectedRoutes';
 import LoginPage from './components/login';
-import BackerPage from './components/Backer';
+import BakerPage from './components/baker';
 import FarmerPage from './components/Farmer';
 function App() {
   return (
@@ -11,9 +11,9 @@ function App() {
       <Router>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/backer" element={
-            <ProtectedRoute allowedRoles={['backer']}>
-              <BackerPage />
+          <Route path="/baker" element={
+            <ProtectedRoute allowedRoles={['baker']}>
+              <BakerPage />
             </ProtectedRoute>
           } />
           <Route path="/farmer" element={
