@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import HelloService from '../service/hello';
-import reactLogo from '../assets/react.svg';
+import HelloService from '../../service/hello';
+import reactLogo from  '../../assets/react.svg';
 
-import '../App.css';
+import '../../App.css';
 
-function DashboardPage() {
+function BackerPage() {
   const [data, setData] = useState<string | null>(null);
   const [error, setError] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -135,4 +135,4 @@ function DashboardPage() {
   );
 }
 
-export default DashboardPage;
+export default BackerPage;
