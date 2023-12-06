@@ -21,7 +21,7 @@ function App() {
               <FarmerPage />
             </ProtectedRoute>
           } />
-          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Router>
     </AuthProvider>
