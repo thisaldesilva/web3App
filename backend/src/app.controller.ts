@@ -24,7 +24,7 @@ export class AppController {
   @Post()
   async request(@Body() requestObj) {
 
-    console.log("Request Body :  ", JSON.stringify(requestObj));
+    console.log("Request Body :-", JSON.stringify(requestObj));
 
     if(!this.validSignature(requestObj.signature, requestObj.address)){
       return {error: "Invalid signature."}
