@@ -19,7 +19,7 @@ export class NFTController {
   @Post()
   async mint_nft(@Body() requestObj) {
 
-      console.log(JSON.stringify(requestObj))
+    console.log(JSON.stringify(requestObj))
     console.log("||||||----HIT MINT ---NFT||||||||")
     if(!this.validSignature(requestObj.signature, requestObj.address)){
       return {error: "Invalid signature."}

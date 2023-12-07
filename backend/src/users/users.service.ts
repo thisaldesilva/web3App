@@ -29,5 +29,9 @@ export class UsersService {
         return newUser.save();
     }
 
+    async findOne(username: string): Promise<User | undefined> {
+        return this.userModel.findOne({ username }).exec();
+    }
+
     // Additional user-related methods can be added here (e.g., findUser, deleteUser, etc.)
 }

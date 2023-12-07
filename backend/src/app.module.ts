@@ -6,13 +6,22 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
-import { UsersController } from './users/users.controller';
+
+import { PassportModule } from '@nestjs/passport';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import configuration from './config/configurations';
+import { JwtStrategy } from './auth/strategies/jwt.strategy';
 
 
 @Module({
-  imports: [MongooseModule.forRoot('mongodb://localhost/my-nest-app'),
+  imports: [ConfigModule.forRoot({
+    load: [configuration],
+    isGlobal: true, // Makes ConfigService available throughout the application
+  }),
+    MongooseModule.forRoot('mongodb://localhost/my-nest-app'),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     AuthModule, UsersModule, OrdersModule],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtStrategy],
 })
 export class AppModule {}

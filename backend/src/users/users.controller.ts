@@ -6,15 +6,17 @@ import { UsersService } from './users.service';
 export class UsersController {
     constructor(private usersService: UsersService) {console.log("|||||||||||   HIT USER CONTROLLER     |||||||||||")}
 
-    @Post('Register')
+    @Post('register')
     @HttpCode(HttpStatus.CREATED)
     async register(@Body() createUserDto: CreateUserDto, @Res() response) {
         console.log("||||||||||----HIT REGISTER----||||||||");
         try {
             const user = await this.usersService.create(createUserDto);
+
             return response.status(HttpStatus.CREATED).json({
                 message: 'User successfully registered',
-                user,
+                username: user.username,
+                role: user.role,
             });
         } catch (error) {
             // Handle errors (e.g., username already exists)

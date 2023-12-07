@@ -1,17 +1,18 @@
-import { IsString, MinLength, MaxLength, Matches } from 'class-validator';
+import { IsString, MinLength, MaxLength, Matches, IsNotEmpty } from 'class-validator';
 
 export class LoginDto {
+    @IsNotEmpty()
     @IsString()
-    @MinLength(4)
-    @MaxLength(20)
+    @MinLength(4, { message: 'Username must be at least 4 characters long' })
+    @MaxLength(20, { message: 'Username must be no longer than 20 characters' })
     username: string;
 
+    @IsNotEmpty()
     @IsString()
-    @MinLength(8)
-    @MaxLength(32)
-    // Regex for password (at least one uppercase letter, one lowercase letter, and one number)
+    @MinLength(8, { message: 'Password must be at least 8 characters long' })
+    @MaxLength(32, { message: 'Password must be no longer than 32 characters' })
     @Matches(/((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,32})/, {
-        message: 'password too weak',
+        message: 'Password too weak',
     })
     password: string;
 }
