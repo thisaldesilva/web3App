@@ -8,13 +8,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
         super();
     }
 
-    // You can extend the functionality by overriding handleRequest, canActivate, etc.
+    // To handle JWT at HttpOnly and not as Authorization Bearer token 
     canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
         const request = context.switchToHttp().getRequest();
-        console.log("request -> ", request.cookies)
         const token = request.cookies['jwt'];
-        console.log("JWT ->", token)
-
     
         if (token) {
           request.headers.authorization = `Bearer ${token}`;

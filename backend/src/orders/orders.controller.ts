@@ -14,8 +14,6 @@ export class OrdersController {
     @Roles('baker')
     @Post()
     async create(@Req() req, @Body() createOrderDto: CreateOrderDto ) {
-        console.log("-------------------- HIT ORDERS ----------------------")
-
         // use the userId from JWT | Do not depend on the body
         createOrderDto.requested_backer_id = req.user.userId
         
@@ -42,6 +40,7 @@ export class OrdersController {
 
     @Patch(':orderId/ship')
     async markAsShipped(@Param('orderId') orderId: string) {
+        console.log("order id -> ", orderId)
         return this.ordersService.markOrderAsShipped(orderId);
     }
 }

@@ -1,8 +1,12 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
+import { AutoIncrementID } from '@typegoose/auto-increment';
 
 @Schema()
 export class Order {
+
+    @Prop({ required: false, unique: false })
+    id: number;
 
     @Prop({ required: true })
     bakerAddress: string;
@@ -25,3 +29,4 @@ export class Order {
 export type OrderDocument = Order & Document;
 
 export const OrderSchema = SchemaFactory.createForClass(Order);
+OrderSchema.plugin(AutoIncrementID, { field: 'id' });

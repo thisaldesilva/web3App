@@ -25,6 +25,8 @@ export class OrdersService {
     // }
 
     async markOrderAsShipped(orderId: string): Promise<Order> {
-        return this.orderModel.findByIdAndUpdate(orderId, { shipped: true }, { new: true }).exec();
+
+        return this.orderModel.findOneAndUpdate({ id: orderId }, { $set: { shipped: true } }, { new: true }).exec();
+
     }
 }
