@@ -30,7 +30,9 @@ export class OrdersController {
 
     @Get(':bakerId')
     async findForBaker(@Param('bakerId') bakerId: string) {
-        return this.ordersService.findOrdersByBaker(bakerId);
+        const res = await this.ordersService.findOrdersByBaker(bakerId);
+        console.log("res -> ", res)
+        return res
     }
 
     // @Delete(':orderId')

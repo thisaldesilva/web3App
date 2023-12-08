@@ -14,8 +14,9 @@ export class Order {
     @Prop({ required: true })
     quantity: number;
 
-    @Prop({ type: Types.ObjectId, ref: 'User', required: true })
-    requested_backer_id: Types.ObjectId;
+    //@Prop({ type: Types.ObjectId, ref: 'User', required: true }) - make this chage for faster retrival
+    @Prop({  ref: 'User.id', required: true })
+    requested_backer_id: number //Types.ObjectId;
 
     @Prop({ default: false })
     shipped: boolean;
