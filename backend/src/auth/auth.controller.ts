@@ -27,13 +27,11 @@ export class AuthController {
         }
         
         const jwtToken = await this.authService.login(validUser);
-        //console.log("JWT -: ", jwtToken)
-       
+        response.cookie('jwt', jwtToken['access_token'], { httpOnly: true });
+
         return response.status(HttpStatus.CREATED).json({
             user: validUser,
-            message: 'User successfully Authenticatted',
-            access_token: jwtToken['access_token'],
-            
+            message: 'User successfully Authenticatted'
         });
     }
 }
