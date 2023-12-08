@@ -1,138 +1,113 @@
-import { useState } from 'react';
-import HelloService from '../../service/hello';
-import reactLogo from  '../../assets/react.svg';
-
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import '../../App.css';
 
-function BackerPage() {
-  const [data, setData] = useState<string | null>(null);
-  const [error, setError] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+function BakerPage() {
+  const [orders, setOrders] = useState([]);
+  const [wheatQuantity, setWheatQuantity] = useState('');
+  const [confirmOrderId, setConfirmOrderId] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const [verifyData, setVerifyData] = useState<string | null>(null);
-  const [verifyError, setVerifyError] = useState<boolean>(false);
-  const [verifyLoading, setVerifyLoading] = useState<boolean>(false);
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const bakerId = JSON.parse(localStorage.getItem('user')).id;
+      try {
+        const response = await axios.get(`http://localhost:3000/orders/${bakerId}`, { withCredentials: true });
+        console.log("RES_> ", response.data)
+        setOrders(response.data);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
+      }
+    };
 
-  const [mintData, setMintData] = useState<string | null>(null);
-  const [mintError, setMintError] = useState<boolean>(false);
-  const [mintLoading, setMintLoading] = useState<boolean>(false);
+    fetchOrders();
+  }, []);
 
-  const [wheatQuantity, setInputValue] = useState<string>('');
-  const [orderNo, setOrderNoValue] = useState<string>('');
-  const [mintOrderValue, setMintOrderNoValue] = useState<string>('');
+  const handleOrderWheat = async () => {
+    if (!isFinite(wheatQuantity)) {
+      setErrorMessage('Please enter a valid number for quantity.');
+      return;
+    }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-  };
+    // MetaMask integration to get bakerAddress
+    // ...
 
-  const handleOrderNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setOrderNoValue(event.target.value);
-  };
-
-  const handleMintOrderNoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMintOrderNoValue(event.target.value);
-  };
-
-  const getData = async () => {
     try {
-      setLoading(true);
-      setError(false);
-      setData(null);
-      const response = await HelloService.request(parseInt(wheatQuantity));
-      setData(response);
+      const bakerId = JSON.parse(localStorage.getItem('user')).id;
+      await axios.post('http://localhost:3000/orders', {
+        bakerAddress: 'MetamaskBakerAddress', // Replace with actual address from MetaMask
+        quantity: parseFloat(wheatQuantity),
+        requested_backer_id: bakerId
+      }, { withCredentials: true });
+
+      setWheatQuantity('');
     } catch (error) {
-      setError(true);
-    } finally {
-      setLoading(false);
+      console.error('Error placing order:', error);
+      setErrorMessage('Failed to place the order.');
     }
   };
 
-  const verifyOrder = async () => {
-    try {
-      setVerifyLoading(true);
-      setVerifyError(false);
-      setVerifyData(null);
-      const response = await HelloService.verify(parseInt(orderNo));
-      setVerifyData(response);
-    } catch (error) {
-      setVerifyError(true);
-    } finally {
-      setVerifyLoading(false);
+  const handleConfirmOrder = () => {
+    const order = orders.find(o => o._id === confirmOrderId && o.shipped);
+    if (!order) {
+      setErrorMessage('Invalid order ID or order not shipped.');
+      return;
     }
-  };
 
-  const mintNFT = async () => {
-    try {
-      setMintLoading(true);
-      setMintError(false);
-      setMintData(null);
-      const response = await HelloService.mint_nft(parseInt(mintOrderValue));
-      setMintData(response);
-    } catch (error) {
-      setMintError(true);
-    } finally {
-      setMintLoading(false);
-    }
+    // Handle order confirmation logic
+    // ...
   };
 
   return (
-    <>
+    <div>
       <div>
-        <a href='https://vitejs.dev' target='_blank'>
-         
-        </a>
-        <a href='https://react.dev' target='_blank'>
-          <img src={reactLogo} className='logo react' alt='React logo' />
-        </a>
-      </div>
-      <h1>prototype</h1>
-      <div className='card'>
-      <input
+        <input
           type="text"
-          placeholder="Wheat Quantity"
           value={wheatQuantity}
-          onChange={handleInputChange}
+          onChange={(e) => setWheatQuantity(e.target.value)}
+          placeholder="Enter Wheat Quantity (Kg)"
         />
-        <button disabled={loading} onClick={getData}>
-          Request Wheat
-        </button>
-        <p>
-          {loading && 'Loading...'}
-          {error && 'Error'}
-          {data && data}
-        </p>
-        <input
-          type="text"
-          placeholder="Order No"
-          value={orderNo}
-          onChange={handleOrderNoChange}
-        />
-        <button disabled={loading} onClick={verifyOrder}>
-          Verify Order
-        </button>
-        <p>
-          {verifyLoading && 'Loading...'}
-          {verifyError && 'Error'}
-          {verifyData && verifyData}
-        </p>
-        <input
-          type="text"
-          placeholder="Order No"
-          value={mintOrderValue}
-          onChange={handleMintOrderNoChange}
-        />
-        <button disabled={loading} onClick={mintNFT}>
-          Mint NFT
-        </button>
-        <p>
-          {mintLoading && 'Loading...'}
-          {mintError && 'Error'}
-          {mintData && mintData}
-        </p>
+        <button onClick={handleOrderWheat}>Order Wheat</button>
       </div>
-      <p className='read-the-docs'></p>
-    </>
+
+      <div>
+        <input
+          type="text"
+          value={confirmOrderId}
+          onChange={(e) => setConfirmOrderId(e.target.value)}
+          placeholder="Enter Order ID to Confirm"
+        />
+        <button onClick={handleConfirmOrder}>Confirm Order</button>
+      </div>
+
+      {errorMessage && <p className="error">{errorMessage}</p>}
+
+      <table>
+        <thead>
+          <tr>
+          <th>Order ID</th>
+            <th>Baker Address</th>
+            <th>Quantity</th>
+            <th>Requested Baker ID</th>
+            <th>Shipped</th>
+            <th>Date Requested</th>
+          </tr>
+        </thead>
+        <tbody>
+          {orders.map(order => (
+            <tr key={order._id}>
+              <td>{order.id || 'null'}</td>
+              <td>{order.bakerAddress}</td>
+              <td>{order.quantity}</td>
+              <td>{order.requested_backer_id}</td>
+              <td>{order.shipped.toString()}</td>
+              <td>{new Date(order.date_requested).toLocaleString()}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
-export default BackerPage;
+export default BakerPage;
