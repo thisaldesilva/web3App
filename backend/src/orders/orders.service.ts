@@ -17,9 +17,7 @@ export class OrdersService {
     }
 
     async findOrdersByBaker(bakerId: string): Promise<Order[]> {
-        console.log("ID-------> ", bakerId)
         const res = await this.orderModel.find({ requested_backer_id: bakerId }).exec();
-        console.log("res -> ", res)
         return res
     }
 
