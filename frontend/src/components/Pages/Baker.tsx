@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../../App.css';
+import MetaMaskService from '../../service/MetaMaskService';
 
 function BakerPage() {
   const [orders, setOrders] = useState([]);
@@ -30,12 +31,14 @@ function BakerPage() {
     }
 
     // MetaMask integration to get bakerAddress
-    // ...
+    const walletData = await MetaMaskService.getSignatireAndAddress()
+    console.log("Wallet Data  ->  ", walletData)
 
     try {
       const bakerId = JSON.parse(localStorage.getItem('user')).id;
       await axios.post('http://localhost:3000/orders', {
-        bakerAddress: 'MetamaskBakerAddress', // Replace with actual address from MetaMask
+        bakerAddress: walletData.address,
+        metaMaskSignature: walletData.signature ,
         quantity: parseFloat(wheatQuantity),
         requested_backer_id: bakerId
       }, { withCredentials: true });
