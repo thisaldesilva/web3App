@@ -2,8 +2,9 @@ import { AxiosResponse } from 'axios';
 import { stringify } from 'flatted';
 import { Contract, ethers } from "ethers";
 import http from './http-common';
+import { Signature } from '../../node_modules/ethers/lib.commonjs/ethers';
 
-class HelloService {
+class MetaMaskService {
   async getHello() {
     try {
       const response: AxiosResponse = await http.get('/');
@@ -11,6 +12,28 @@ class HelloService {
     } catch (error) {
       console.error(error);
       throw new Error('Error while getting hello');
+    }
+  }
+
+  async getSignatireAndAddress(): Promise<{address: string, Signature: string}>{
+    try{
+      const provider = new ethers.BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // Get the user's Ethereum address
+      const address = await signer.getAddress();
+
+      // Get the user's Ethereum address
+      const signature = await signer.signMessage("ANZ Digital Assets");
+
+      return {
+        address,
+        signature
+      }
+      
+    } catch(error){
+      console.log("Error while MetaMask Intergration")
+      return error
     }
   }
 
@@ -106,4 +129,4 @@ class HelloService {
   
 }
 
-export default new HelloService();
+export default new MetaMaskService();
