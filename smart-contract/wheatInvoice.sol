@@ -45,7 +45,7 @@ contract WheatTrade is ERC721, Ownable {
         require(contains(bakerOrders[msg.sender], invoiceId), "Unauthorized baker");
 
         invoice.isAccepted = true;
-         _mint(msg.sender, invoiceId);
+         _mint(farmer, invoiceId);
         emit WheatAccepted(invoiceId, msg.sender);
     }
 
