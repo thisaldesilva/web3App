@@ -72,23 +72,23 @@ function FarmerPage() {
       <table>
         <thead>
           <tr>
+            <th>Order ID</th>
             <th>Baker Address</th>
             <th>Quantity</th>
             <th>Requested Baker ID</th>
             <th>Shipped</th>
             <th>Date Requested</th>
-            <th>ID</th>
           </tr>
         </thead>
         <tbody>
           {orders.map(order => (
             <tr key={order._id}>
+              <td>{order.id || 'null'}</td>
               <td>{order.bakerAddress || 'null'}</td>
               <td>{order.quantity || 'null'}</td>
               <td>{order.requested_backer_id || 'null'}</td>
               <td>{order.shipped !== undefined ? order.shipped.toString() : 'null'}</td>
               <td>{order.date_requested || 'null'}</td>
-              <td>{order.id || 'null'}</td>
             </tr>
           ))}
         </tbody>

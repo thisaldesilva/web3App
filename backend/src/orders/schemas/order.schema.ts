@@ -8,6 +8,9 @@ export class Order {
     @Prop({ required: false, unique: false })
     id: number;
 
+    @Prop({ required: false, unique: false, default: null })
+    invoiceId: number;
+
     @Prop({ required: true })
     bakerAddress: string;
 

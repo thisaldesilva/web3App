@@ -3,21 +3,21 @@ import { IsSignatureValid } from '../decorators/signature-valid.decorator';
 
 export class CreateOrderDto {
     
-    @IsString()
-    @IsNotEmpty()
-    bakerAddress: String;
+    // @IsString()
+    // @IsNotEmpty()
+    bakerAddress: string;
 
-    @IsString()
-    @IsNotEmpty()
-    @IsSignatureValid({ message: 'Invalid MetaMask signature' })
-    metaMaskSignature: String;
+    // @IsString()
+    // @IsNotEmpty()
+    //@IsSignatureValid({ message: 'Invalid MetaMask signature' })
+    metaMaskSignature: string;
 
-    @IsNumber()
-    @IsNotEmpty()
+    // @IsNumber()
+    // @IsNotEmpty()
     quantity: string;
 
-    @IsNumber()
-    @IsNotEmpty()
+    // @IsNumber()
+    // @IsNotEmpty()
     requested_backer_id: string;
 
 }

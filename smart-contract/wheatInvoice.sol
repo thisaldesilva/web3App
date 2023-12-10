@@ -9,7 +9,8 @@ contract WheatTrade is ERC721, Ownable {
     address public farmer;
 
     struct Invoice {
-        uint256 invoiceId;
+        uint256 invoiceId; // for clarity
+        uint256 orderId; // for clarity
         uint256 quantity;
         uint256 price;
         bool isAccepted;
@@ -17,6 +18,7 @@ contract WheatTrade is ERC721, Ownable {
 
     mapping(uint256 => Invoice) public invoices;
     mapping(address => uint256[]) private bakerOrders;
+    mapping(address => uint256[]) private orderIdToInvoiceId;
 
     event WheatShipped(uint256 indexed invoiceId, address indexed baker, uint256 quantity, uint256 price);
     event WheatAccepted(uint256 indexed invoiceId, address indexed baker);
@@ -27,11 +29,12 @@ contract WheatTrade is ERC721, Ownable {
         nextInvoiceId = 1;
     }
 
-    function shipWheat(address baker, uint256 quantity, uint256 price) external onlyOwner returns (uint) {
+    function shipWheat(address baker, uint256 orderId, uint256 quantity, uint256 price) external onlyOwner returns (uint) {
         uint256 invoiceId = nextInvoiceId++;
-        Invoice memory newInvoice = Invoice(invoiceId, quantity, price, false);
+        Invoice memory newInvoice = Invoice(invoiceId, orderId, quantity, price, false);
         invoices[invoiceId] = newInvoice;
         bakerOrders[baker].push(invoiceId);
+        orderIdToInvoiceId[orderId] = invoiceId;
         
         emit WheatShipped(invoiceId, baker, quantity, price);
         return invoiceId;
@@ -67,5 +70,11 @@ contract WheatTrade is ERC721, Ownable {
             }
         }
         return false;
+    }
+
+      function getInvoiceIdByOrderId(uint256 orderId) external view returns (uint256) {
+        uint256 invoiceId = orderIdToInvoiceId[orderId];
+        require(invoiceId != 0, "Invoice for this order ID does not exist");
+        return invoiceId;
     }
 }

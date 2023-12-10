@@ -14,9 +14,9 @@ export class OrdersController {
     @Roles('baker')
     @Post()
     async create(@Req() req, @Body() createOrderDto: CreateOrderDto ) {
+    
         // use the userId from JWT | Do not depend on the body
         createOrderDto.requested_backer_id = req.user.userId
-        
         const response = await this.ordersService.createOrder(createOrderDto);
         return response 
     }
@@ -29,16 +29,15 @@ export class OrdersController {
     }
 
     @Get(':bakerId')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('baker')
     async findForBaker(@Param('bakerId') bakerId: string) {
         return await this.ordersService.findOrdersByBaker(bakerId);
     }
 
-    // @Delete(':orderId')
-    // async delete(@Param('orderId') orderId: string) {
-    //     return this.ordersService.deleteOrder(orderId);
-    // }
-
     @Patch(':orderId/ship')
+    @UseGuards(JwtAuthGuard, RolesGuard)
+    @Roles('farmer')
     async markAsShipped(@Param('orderId') orderId: string) {
         console.log("order id -> ", orderId)
         return this.ordersService.markOrderAsShipped(orderId);
