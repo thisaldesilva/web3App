@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  app:
+    container_name: nestjs-app
+    build: 
+      context: ../../backend
+      dockerfile: Dockerfile 
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb+srv://anz-test-user:UGNrrAnWZLmRBBWk@cluster0.hueu3qn.mongodb.net/?retryWrites=true&w=majority
+      - PORT=8080
+
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:

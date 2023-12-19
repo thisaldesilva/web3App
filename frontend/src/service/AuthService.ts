@@ -1,8 +1,9 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
 axios.defaults.withCredentials = true;
+import config  from '../config/index';
 
-
-const LOGIN_URL = 'http://localhost:3000/auth/login'; // Replace with config file
+let apiBaseUrl: string = config.apiBaseUrl;
+let LOGIN_URL = `${apiBaseUrl}/auth/login`;
 
 export interface LoginResponse {
   user(user: any): unknown;
@@ -16,7 +17,9 @@ export interface ErrorResponse {
 
 const login = async (username: string, password: string): Promise<LoginResponse | ErrorResponse> => {
   try {
-    console.log("SSSSsssssssssSSSSSSSS", username, password)
+    apiBaseUrl = config.apiBaseUrl;
+    LOGIN_URL = `${apiBaseUrl}/auth/login`;
+    console.log("SSSSsssssssssSSSSSSSS", username, password, LOGIN_URL)
     const response = await axios.post<LoginResponse>(
         LOGIN_URL, 
         { username, password, role: 'farmer' },

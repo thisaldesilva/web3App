@@ -14,7 +14,7 @@ export class AuthController {
     @Post('login')
     @HttpCode(HttpStatus.OK)
     async login(@Body() createUserDto: CreateUserDto, @Res() response) {
-        //console.log("|||||||||||HIT AUTH CONTROLLER||||||||||||||", createUserDto)
+        console.log("|||||||||||HIT AUTH CONTROLLER||||||||||||||", createUserDto)
         
         const validUser = await this.authService.validateUser(createUserDto.username, createUserDto.password);
   
@@ -27,7 +27,12 @@ export class AuthController {
         }
         
         const jwtToken = await this.authService.login(validUser);
-        response.cookie('jwt', jwtToken['access_token'], { httpOnly: true });
+        response.cookie('jwt', jwtToken['access_token'], { 
+            httpOnly: true,
+            secure: true, // PROF FIX
+            sameSite: 'None', // PROF FIX
+            //domain: 'https://frontend-withcon-5gykd7gzwa-uc.a.run.app', // PROF FIX
+        });
 
         return response.status(HttpStatus.CREATED).json({
             user: validUser,

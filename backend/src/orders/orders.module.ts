@@ -6,21 +6,13 @@ import { OrdersController } from './orders.controller';
 import { OrdersService } from './orders.service';
 import { OrderSchema } from './schemas/order.schema';
 //import { OrderUpdatePublisherService } from './order-update-producer-service'
+//import { RabbitMQModule } from '../common/rabbitMQ/rabbitmq.module';
 
-import { RabbitMQModule } from '@nestjs-plus/rabbitmq';
 
 @Module({
     imports: [
         MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]), 
-        // RabbitMQModule.forRoot({
-        //     exchanges: [
-        //       {
-        //         name: 'order-exchange',
-        //         type: 'direct',
-        //       },
-        //     ],
-        //     uri: 'amqp://guest:guest@localhost:5672', // Update with global config
-        //   }),    
+        //RabbitMQModule
     ],
     controllers: [OrdersController],
     providers: [OrdersService, SmartContractService]

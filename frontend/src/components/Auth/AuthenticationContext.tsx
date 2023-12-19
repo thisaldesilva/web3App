@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import  { createContext, useState, useContext, useEffect } from 'react';
 import { validateUsername, validatePassword } from '../Helpers/Validation';
 import AuthService, { ErrorResponse } from '../../service/AuthService';
 
@@ -37,9 +37,10 @@ export const AuthProvider = ({ children }) => {
       console.log("response FROM THE Backend  ->  ", response)
 
       if ('message' in response && response['message'] == 'User successfully Authenticatted') {
-        console.log("setting access token using setuser......", response.user)
-       
-        setUser(response.user); 
+        if('user' in response){
+          console.log("setting access token using setuser......", response.user)
+          setUser(response.user); 
+        }
         
         //setUser({ token: response.access_token, role: response.role }); // Set the user role
         //return response.role; // Return the role for navigation

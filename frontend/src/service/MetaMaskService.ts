@@ -15,7 +15,7 @@ class MetaMaskService {
     }
   }
 
-  async getSignatireAndAddress(): Promise<{address: string, Signature: string}>{
+  async getSignatireAndAddress(): Promise<{address: string, signature: string}>{
     try{
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
@@ -33,7 +33,7 @@ class MetaMaskService {
       
     } catch(error){
       console.log("Error while MetaMask Intergration")
-      return error
+      
     }
   }
 
@@ -42,11 +42,11 @@ class MetaMaskService {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
-      const abi = [
-        "function getnextInvoiceId() view public returns(uint256)",
-        "function symbol() view returns (string)",
-        "function add() public"
-      ]
+      // const abi = [
+      //   "function getnextInvoiceId() view public returns(uint256)",
+      //   "function symbol() view returns (string)",
+      //   "function add() public"
+      // ]
       
       // Get the user's Ethereum address
       const address = await signer.getAddress();
@@ -98,11 +98,11 @@ class MetaMaskService {
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
-      const abi = [
-        "function getnextInvoiceId() view public returns(uint256)",
-        "function symbol() view returns (string)",
-        "function add() public"
-      ]
+      // const abi = [
+      //   "function getnextInvoiceId() view public returns(uint256)",
+      //   "function symbol() view returns (string)",
+      //   "function add() public"
+      // ]
 
       // Get the user's Ethereum address
       const address = await signer.getAddress();

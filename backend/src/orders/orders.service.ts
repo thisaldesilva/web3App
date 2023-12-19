@@ -4,6 +4,8 @@ import { Model } from 'mongoose';
 import { SmartContractService } from '../common/smart-contract.service';
 import { Order } from './schemas/order.schema';
 //import { OrderUpdatePublisherService } from './order-update-producer-service'
+//import { RabbitMQProducer } from '../common/rabbitMQ/rabbitmq.producer';
+import { CreateOrderDto } from './dto/create.order.dto';
 
 @Injectable()
 export class OrdersService {

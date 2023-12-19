@@ -1,7 +1,11 @@
 import axios from 'axios';
+import config  from '../config/index';
+
+const apiBaseUrl: string = config.apiBaseUrl;
 
 export default axios.create({
-  baseURL: 'http://localhost:3000',
+  
+  baseURL: `${apiBaseUrl}`,
   headers: {
     'Content-type': 'application/json',
   },

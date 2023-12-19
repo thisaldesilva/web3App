@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import config from '../../config/index';
 
 function FarmerPage() {
   const [orders, setOrders] = useState([]);
   const [orderId, setOrderId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const apiBaseUrl: string = config.apiBaseUrl;
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/orders', { withCredentials: true });
+        const response = await axios.get(`${apiBaseUrl}/orders`, { withCredentials: true });
         setOrders(response.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -41,7 +43,7 @@ function FarmerPage() {
   
     try {
       console.log("---------->")
-      await axios.patch(`http://localhost:3000/orders/${orderId}/ship`, {}, { withCredentials: true });
+      await axios.patch(`${apiBaseUrl}/orders/${orderId}/ship`, {}, { withCredentials: true });
       setOrders(orders.map(order => 
         order.id !== undefined && order.id.toString() === orderId ? { ...order, shipped: true } : order
       ));

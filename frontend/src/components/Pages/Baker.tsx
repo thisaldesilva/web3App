@@ -3,18 +3,21 @@ import axios from 'axios';
 import '../../App.css';
 import MetaMaskService from '../../service/MetaMaskService';
 import { Contract, ethers } from 'ethers';
+import config from '../../config/index';
 
 function BakerPage() {
   const [orders, setOrders] = useState([]);
   const [wheatQuantity, setWheatQuantity] = useState('');
   const [confirmInvoiceId, setConfirmOrderId] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const apiBaseUrl: string = config.apiBaseUrl;
 
   useEffect(() => {
     const fetchOrders = async () => {
       const bakerId = JSON.parse(localStorage.getItem('user')).id;
       try {
-        const response = await axios.get(`http://localhost:3000/orders/${bakerId}`, { withCredentials: true });
+        
+        const response = await axios.get(`${apiBaseUrl}/orders/${bakerId}`, { withCredentials: true });
         console.log("RES_> ", response.data)
         setOrders(response.data);
       } catch (error) {
@@ -27,7 +30,7 @@ function BakerPage() {
 
   const handleOrderWheat = async () => {
     console.log("-----------------------------")
-    if (isNaN(wheatQuantity) || !isFinite(wheatQuantity)) {
+    if (isNaN(parseFloat(wheatQuantity)) || !isFinite(parseFloat(wheatQuantity))) {
       setErrorMessage('Please enter a valid number for quantity.');
       return;
     }
@@ -38,7 +41,7 @@ function BakerPage() {
 
     try {
       const bakerId = JSON.parse(localStorage.getItem('user')).id;
-      await axios.post('http://localhost:3000/orders', {
+      await axios.post(`${apiBaseUrl}/orders`, {
         bakerAddress: walletData.address,
         metaMaskSignature: walletData.signature ,
         quantity: parseFloat(wheatQuantity),
