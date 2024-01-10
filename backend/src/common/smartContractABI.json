@@ -1,0 +1,22 @@
+[
+    "function shipWheat(address baker, uint256 orderId, uint256 quantity, uint256 price)",
+    "function getInvoiceIdByOrderId(uint256 orderId)",
+    "function getnextInvoiceId()",
+    "event WheatShipped(uint256 indexed invoiceId, uint256 indexed orderId, address indexed baker, uint256 quantity, uint256 price)",
+    "event WheatAccepted(uint256 indexed invoiceId, address indexed baker)",
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "nextInvoiceId",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+      }
+  ]

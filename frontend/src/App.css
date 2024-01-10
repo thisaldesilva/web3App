@@ -121,3 +121,44 @@ input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:foc
   box-shadow: 0 0 8px #646cff88; /* Adds a glow effect on focus */
 }
 
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+  }
+
+  .card {
+    background-color: #1e1e1e; /* Darker background for card */
+    color: #ffffff;
+  }
+
+  th {
+    background-color: #333333; /* Darker background for table headers */
+  }
+
+  tr:nth-child(even) {
+    background-color: #2c2c2c; /* Darker zebra striping for rows */
+  }
+
+  th {
+    background-color: #333333; /* Darker background for headers */
+    color: #ffffff; /* Light text color for contrast */
+  }
+
+  tr:hover {
+    background-color: #3a3a3a; /* Darker hover effect for rows */
+  }
+
+  button {
+    background-color: #5a5a5a; /* Darker background for buttons */
+    color: #ffffff; /* Light text color for buttons */
+    border: 2px solid #444444; /* Darker border color for buttons */
+  }
+
+  button:hover {
+    background-color: #484848; /* Even darker shade on hover */
+    border-color: #2a2a2a; /* Dark border color on hover */
+  }
+  
+}
+

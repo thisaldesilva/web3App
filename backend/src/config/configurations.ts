@@ -1,5 +1,8 @@
 export default () => ({
     JWT_SECRET: "_ANZ_",
-    databaseUri: process.env.DATABASE_URI,
-    MONGODB_URI: process.env.MONGO_URI
+    MONGODB_URI: process.env.MONGO_URI,
+    CONTRACT_ADDRESS: '0x3F228B40D4e532f2759677D31f73eA9626CB1Ecf',
+    WALLET_PRIVATE_KEY: '6ae56201b98cb1e88fde983f462279ed6b3a8f97ed0ca47f3b705f4414e09a0a',
+    BLOCKCHAIN_NETWORK: 'goerli',
+    INFURA_URL: '5a5ad7ff61d340348952bd8458971143'
   });

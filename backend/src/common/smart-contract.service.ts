@@ -1,10 +1,11 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ethers } from 'ethers';
 import { OrdersService } from '../orders/orders.service';
 import { OrderStatus } from '../common/enums/order-status.enum'
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
-export class SmartContractService {
+export class SmartContractService implements OnModuleInit {
 
   private provider: ethers.Provider;
   private wallet: ethers.Wallet;
@@ -31,15 +32,21 @@ export class SmartContractService {
         "type": "function"
       }
   ];
-  private readonly contractAddress = '0x3F228B40D4e532f2759677D31f73eA9626CB1Ecf';
+  private readonly contractAddress: string //= '0x3F228B40D4e532f2759677D31f73eA9626CB1Ecf';
 
-  constructor(@Inject(forwardRef(() => OrdersService)) private ordersService: OrdersService
-    ) 
+  constructor(@Inject(forwardRef(() => OrdersService)) private ordersService: OrdersService, private configService: ConfigService) 
   {
     console.log("****************SmartContractService Service HIT")
     //this.provider = ethers.getDefaultProvider('goerli');
-    this.provider = new ethers.InfuraProvider('goerli', '5a5ad7ff61d340348952bd8458971143');
-    this.wallet = new ethers.Wallet('6ae56201b98cb1e88fde983f462279ed6b3a8f97ed0ca47f3b705f4414e09a0a', this.provider);
+
+    this.contractAddress = this.configService.get<string>('CONTRACT_ADDRESS');
+    const privateKey = this.configService.get<string>('WALLET_PRIVATE_KEY'); // '6ae56201b98cb1e88fde983f462279ed6b3a8f97ed0ca47f3b705f4414e09a0a'
+    const providerUrl = this.configService.get<string>('INFURA_URL');
+    const network = this.configService.get<string>('BLOCKCHAIN_NETWORK');
+
+
+    this.provider = new ethers.InfuraProvider(network, providerUrl);
+    this.wallet = new ethers.Wallet(privateKey, this.provider);
     this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet);
   }
 

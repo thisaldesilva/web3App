@@ -63,10 +63,10 @@ function FarmerPage() {
       return;
     }
 
-    if (!price || isNaN(price) || parseFloat(price) < 0) {
-      setErrorMessage('Please enter a valid price.');
-      return;
-    }
+    // if (!price || isNaN(price) || parseFloat(price) < 0) {
+    //   setErrorMessage('Please enter a valid price.');
+    //   return;
+    // }
   
     const orderToRequest = orders.find(order => 
       order.id !== undefined && order.id.toString() === acceptOrderId && !(order.status == 'Requested')
@@ -103,7 +103,7 @@ function FarmerPage() {
           placeholder="Order ID" 
         />
         <input 
-        type="number" 
+        type="text" 
         value={price} 
         onChange={(e) => setPrice(e.target.value)} 
         placeholder="Unit Price" 
