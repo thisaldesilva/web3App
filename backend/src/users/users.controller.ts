@@ -27,6 +27,4 @@ export class UsersController {
             });
         }
     }
-
-    // Other user-related endpoints can be added here
 }

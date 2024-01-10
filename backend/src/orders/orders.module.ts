@@ -14,7 +14,8 @@ import { OrderSchema } from './schemas/order.schema';
         MongooseModule.forFeature([{ name: 'Order', schema: OrderSchema }]), 
         //RabbitMQModule
     ],
-    controllers: [OrdersController],
-    providers: [OrdersService, SmartContractService]
+    controllers: [OrdersController], 
+    providers: [OrdersService, SmartContractService],
+    exports: [OrdersService]
 })
 export class OrdersModule {}

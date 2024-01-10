@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
 import { AutoIncrementID } from '@typegoose/auto-increment';
+import { OrderStatus as Status } from '../../common/enums/order-status.enum';
 
 @Schema()
 export class Order {
@@ -14,6 +15,9 @@ export class Order {
     @Prop({ required: true })
     bakerAddress: string;
 
+    @Prop({ required: false, default: null })
+    unitPrice: number;
+
     @Prop({ required: true })
     quantity: number;
 
@@ -21,8 +25,8 @@ export class Order {
     @Prop({  ref: 'User.id', required: true })
     requested_backer_id: number //Types.ObjectId;
 
-    @Prop({ default: false })
-    shipped: boolean;
+    @Prop({ enum: Status, required: true, default: Status.Requested })
+    status: Status;
 
     @Prop({ default: Date.now })
     date_requested: Date;

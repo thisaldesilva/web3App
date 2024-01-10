@@ -6,6 +6,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
+import { WebhookModule } from './webhook/webhook.module';
 
 import { PassportModule } from '@nestjs/passport';
 import { ConfigModule, ConfigService } from '@nestjs/config';
@@ -32,7 +33,7 @@ import { JwtStrategy } from './auth/strategies/jwt.strategy';
     //MongooseModule.forRoot('mongodb://localhost/my-nest-app'),
 
     PassportModule.register({ defaultStrategy: 'jwt' }),
-    AuthModule, UsersModule, OrdersModule,
+    AuthModule, UsersModule, OrdersModule, WebhookModule,
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService) => {
         const mongoUri = configService.get<string>('MONGODB_URI');

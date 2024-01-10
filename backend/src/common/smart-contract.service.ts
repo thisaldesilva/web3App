@@ -1,5 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ethers } from 'ethers';
+import { OrdersService } from '../orders/orders.service';
+import { OrderStatus } from '../common/enums/order-status.enum'
 
 @Injectable()
 export class SmartContractService {
@@ -8,9 +10,11 @@ export class SmartContractService {
   private wallet: ethers.Wallet;
   private contract: ethers.Contract;
   private readonly abi = [
-    "function shipWheat(address baker, uint256 quantity, uint256 price)",
+    "function shipWheat(address baker, uint256 orderId, uint256 quantity, uint256 price)",
     "function getInvoiceIdByOrderId(uint256 orderId)",
     "function getnextInvoiceId()",
+    "event WheatShipped(uint256 indexed invoiceId, uint256 indexed orderId, address indexed baker, uint256 quantity, uint256 price)",
+    "event WheatAccepted(uint256 indexed invoiceId, address indexed baker)",
     {
         "constant": true,
         "inputs": [],
@@ -27,9 +31,11 @@ export class SmartContractService {
         "type": "function"
       }
   ];
-  private readonly contractAddress = '0x6601e1455aDc08e0FE037249ab461E7e01E48506';
+  private readonly contractAddress = '0x3F228B40D4e532f2759677D31f73eA9626CB1Ecf';
 
-  constructor() {
+  constructor(@Inject(forwardRef(() => OrdersService)) private ordersService: OrdersService
+    ) 
+  {
     console.log("****************SmartContractService Service HIT")
     //this.provider = ethers.getDefaultProvider('goerli');
     this.provider = new ethers.InfuraProvider('goerli', '5a5ad7ff61d340348952bd8458971143');
@@ -37,12 +43,27 @@ export class SmartContractService {
     this.contract = new ethers.Contract(this.contractAddress, this.abi, this.wallet);
   }
 
-  async shipWheat(bakerAddress: string, quantity: number, price: number): Promise<void> {
+  onModuleInit() {
+    this.listenToWheatShippedEvents();
+  }
+
+  private listenToWheatShippedEvents() {
+    this.contract.on('WheatShipped', async (invoiceId, orderId, baker, quantity, price, event) => {
+      try {
+        console.log(`***************** Wheat Shipped Event: InvoiceId ${invoiceId}, OrderId ${event.args.orderId} ********************`);
+        await this.ordersService.updateOrderStatusAndInvoiceId(Number(event.args.orderId), OrderStatus.Shipped, Number(invoiceId));
+      } catch (error) {
+        console.error('Error handling WheatShipped event:', error);
+      }
+    });
+  }
+
+  async shipWheat(bakerAddress: string, orderId: number, quantity: number, price: number): Promise<void> {
     try {
         console.log("Calling the shipWheat function on the smartContract....")
         console.log(bakerAddress, quantity)
         // Call the shipWheat function of the smart contract
-        const transaction = await this.contract.shipWheat(bakerAddress, quantity, price);
+        const transaction = await this.contract.shipWheat(bakerAddress, orderId, quantity, price);
         await transaction.wait();
         console.log('Transaction successful:');
     } catch (error) {
