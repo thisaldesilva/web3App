@@ -18,9 +18,9 @@ contract WheatTrade is ERC721, Ownable {
 
     mapping(uint256 => Invoice) public invoices;
     mapping(address => uint256[]) private bakerOrders;
-    mapping(address => uint256[]) private orderIdToInvoiceId;
+    mapping(uint256 => uint256) private orderIdToInvoiceId;
 
-    event WheatShipped(uint256 indexed invoiceId, address indexed baker, uint256 quantity, uint256 price);
+    event WheatShipped(uint256 indexed invoiceId, uint256 indexed orderId, address indexed baker, uint256 quantity, uint256 price);
     event WheatAccepted(uint256 indexed invoiceId, address indexed baker);
 
     constructor() ERC721("WheatInvoice", "WINV") Ownable(msg.sender){
@@ -36,7 +36,7 @@ contract WheatTrade is ERC721, Ownable {
         bakerOrders[baker].push(invoiceId);
         orderIdToInvoiceId[orderId] = invoiceId;
         
-        emit WheatShipped(invoiceId, baker, quantity, price);
+        emit WheatShipped(invoiceId, orderId, baker, quantity, price);
         return invoiceId;
     }
 
