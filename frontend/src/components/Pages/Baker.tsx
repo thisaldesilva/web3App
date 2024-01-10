@@ -49,6 +49,7 @@ function BakerPage() {
       }, { withCredentials: true });
 
       setWheatQuantity('');
+      window.location.reload()
     } catch (error) {
       console.error('Error placing order:', error);
       setErrorMessage('Failed to place the order.');
@@ -56,7 +57,9 @@ function BakerPage() {
   };
 
   const handleConfirmOrder = async () => {
-    const order = orders.find(o => o.invoiceId == confirmInvoiceId && o.shipped);
+    console.log("** Hit handleConfirmOrder **", orders)
+    const order = orders.find(o => o.invoiceId == confirmInvoiceId && o.status == 'shipped');
+    console.log(order)
     if (!order) {
       console.log(order, confirmInvoiceId)
       setErrorMessage('Invalid order ID or order not shipped.');
@@ -75,7 +78,7 @@ function BakerPage() {
       ]
 
       console.log("Creating contract....")
-      const contract = new Contract("0x6601e1455aDc08e0FE037249ab461E7e01E48506", abi, signer);
+      const contract = new Contract("0x3F228B40D4e532f2759677D31f73eA9626CB1Ecf", abi, signer);
       console.log("About to call the function on the contract....")
       const tx = await contract.acceptWheat(order.invoiceId);
       console.log("Awaiting for the transaction....")
@@ -95,11 +98,13 @@ function BakerPage() {
   return (
     <div>
       <div>
+      <h1>Baker Page</h1>
+      <p>This is a page exclusively for Baker activities.</p>
         <input
           type="text"
           value={wheatQuantity}
           onChange={(e) => setWheatQuantity(e.target.value)}
-          placeholder="Enter Wheat Quantity (Kg)"
+          placeholder="Enter Wheat Quantity"
         />
         <button onClick={handleOrderWheat}>Order Wheat</button>
       </div>
@@ -109,9 +114,9 @@ function BakerPage() {
           type="text"
           value={confirmInvoiceId}
           onChange={(e) => setConfirmOrderId(e.target.value)}
-          placeholder="Enter Order ID to Confirm"
+          placeholder="Enter Order ID"
         />
-        <button onClick={handleConfirmOrder}>Confirm Order</button>
+        <button onClick={handleConfirmOrder}>Order Received</button>
       </div>
 
       {errorMessage && <p className="error">{errorMessage}</p>}
@@ -123,7 +128,7 @@ function BakerPage() {
             <th>Baker Address</th>
             <th>Quantity</th>
             <th>Requested Baker ID</th>
-            <th>Shipped</th>
+            <th>Status</th>
             <th>Date Requested</th>
             <th>Invoice ID</th>
           </tr>
@@ -135,7 +140,7 @@ function BakerPage() {
               <td>{order.bakerAddress}</td>
               <td>{order.quantity}</td>
               <td>{order.requested_backer_id}</td>
-              <td>{order.shipped.toString()}</td>
+              <td>{order.status}</td>
               <td>{new Date(order.date_requested).toLocaleString()}</td>
               <td>{order.invoiceId || 'N/A'}</td>
             </tr>
