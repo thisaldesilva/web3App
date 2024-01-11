@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract WheatTrade is ERC721, Ownable {
+contract WheatInvoice is ERC721, Ownable {
     uint256 public nextInvoiceId;
     address public farmer;
 
