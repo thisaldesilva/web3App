@@ -98,6 +98,7 @@ function FarmerPage() {
       <form onSubmit={handleAcceptOrder}>
         <input 
           type="text" 
+          style={{ marginRight: '10px' }}
           value={acceptOrderId} 
           onChange={(e) => setAcceptOrderId(e.target.value)} 
           placeholder="Order ID" 
